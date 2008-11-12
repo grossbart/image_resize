@@ -1,4 +1,5 @@
-<h1>Image Resize</h1>
+<h1>Documentation</h1>
+<h2>Image Resize</h2>
 
 <p>With the <em>Image Resize</em> plugin enabled, you can easily create thumbnails of your images.</p>
 
@@ -42,19 +43,18 @@
     <li><code>&lt;img src="public/images/flower.<strong>x150</strong>.jpg" alt="" /&gt;</code> (resize to height)</li>
 </ul>
 
+<p>Since version 1.1.0 you can also use a PHP-function to create the image tags:</p>
+
+<p><code>&lt;?php echo image_resize_image_tag($path_to_file, $width = NULL, $height = NULL, $options = array()); ?&gt;</code></p>
+
 <p>Of course the original file (<code>flower.jpg</code>) has to exist. The thumbnails will be created in the same folder as the original file.</p>
 
 
-<h3>Important notes</h3>
-
-<p>Because the images are generated on first access, they won't show up in the browser the first time a page is viewed. A reload lets the flowers blossom!</p>
-<p>Also, because access to plugins is restricted to certain roles, an administrator has to visit a page with a thumbnail that has not yet been resized in order to make the magic happen. Ordinary visitors don't have the permissions to create thumbnails.</p>
-
 <h3>How does it work?</h3>
 
-<p>This module relies on some mod_rewrite magic: If the requested thumbnail exists, Apache knows this and delivers the file to the browser. If the file doesn't exist, Apache hands control over to Frog CMS.</p>
+<p>This module relies on some <code>mod_rewrite</code> magic: If the requested thumbnail exists, Apache knows this and delivers the file to the browser. If the file doesn't exist, Apache hands control over to Frog CMS.</p>
 
-<p>Frog won't find the file either, so it sends a page-not-found message. This is the moment where the Image Resize plugin suddenly feels responsible. It checks whether an image without the dimension specifier exists (<code>flower.jpg</code>) and converts it into a thumbnail with the requested name (<code>flower.230x150.jpg</code>). The next time someone asks for that file it will be there!</p>
+<p>Frog won't find the file either, so it sends a <code>page_not_found</code> message. This is the moment where the Image Resize plugin suddenly feels responsible. It checks whether an image without the dimension specifier exists (<code>flower.jpg</code>) and converts it into a thumbnail with the requested name (<code>flower.230x150.jpg</code>). The next time someone asks for that file it will be there!</p>
 
 <h3>About this plugin</h3>
 
@@ -62,8 +62,8 @@
 
 <p>It was inspired by the Drupal <a href="http://drupal.org/project/imagecache">Image Cache</a> module. The image resize functions are taken from <a href="http://drupal.org/">Drupal</a> and adapted for Frog CMS.</p>
 
-<p>The plugin can be installed via Subversion. In your Frog CMS plugin folder, execute the following command (all on one line):</p>
+<p>The plugin can be installed via Github, where you can either download a ZIP-file or checkout the Git repository.</p>
 
-<p><code>svn co http://www.naehrstoff.ch/svn/frog_image_resize ./image_resize</code></p>
+<p><a href="http://github.com/naehrstoff/image-resize-for-frog/tree/master">Download the plugin</a> from Github.</p>
 
-<p>Patches are very welcome!</p>
+<p>Patches and suggestions are very welcome!</p>

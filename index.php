@@ -1,6 +1,6 @@
 <?php
 
-include("ImageResize.php");
+require_once("ImageResize.php");
 
 Plugin::setInfos(array(
 	'id'          => 'image_resize',
@@ -80,6 +80,7 @@ function image_resize_scale($path) {
 /**
  * Helper function to create an image tag
  */
+ 
 function image_resize_image_tag($image_path, $width = NULL, $height = NULL, $options = array()) {
     if (!array_key_exists("alt", $options)) $options['alt'] = '';
     $html_options = "";

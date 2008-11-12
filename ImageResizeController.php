@@ -1,6 +1,6 @@
 <?php
 
-include("ImageResize.php");
+require_once("ImageResize.php");
 
 class ImageResizeController extends PluginController {
 
