@@ -64,6 +64,6 @@
 
 <p>The plugin can be installed via Github, where you can either download a ZIP-file or checkout the Git repository.</p>
 
-<p><a href="http://github.com/naehrstoff/image-resize-for-frog/tree/master">Download the plugin</a> from Github.</p>
+<p><a href="http://github.com/naehrstoff/image_resize/tree/master">Download the plugin</a> from Github.</p>
 
 <p>Patches and suggestions are very welcome!</p>

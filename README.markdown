@@ -48,6 +48,8 @@ Contributors
 Changelog
 ---------
 
+* 1.1.1 (November 21, 2008)
+	* Changed name of Github repository to prevent errors when installing the plugin.
 * 1.1.0 (November 12, 2008)
 	* Added globally accessible function `image_resize_image_tag()` to create image tags programmatically.
 	* Removed need to reload after thumbnail creation
