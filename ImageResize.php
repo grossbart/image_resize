@@ -28,6 +28,38 @@ class ImageResize {
       return ImageResize::image_gd_resize($source, $destination, $width, $height);
   }
   
+  public function image_scale_cropped($source, $destination, $width, $height)
+  {
+      $info = ImageResize::image_get_info($source);
+
+      // don't scale up
+      if ($width > $info['width'] && $height > $info['height']) {
+          return false;
+      }
+      
+      $aspect = $info['height'] / $info['width'];
+      
+      /* If we are square. */
+      if (!$height || !$width || $height == $width) {
+          if ($info['width'] > $info['height']) {
+              $source_width = $source_height = $info['height'];
+              $source_y = 0;
+              $source_x = round(($info['width'] - $info['height']) / 2);
+          } else {
+              $source_width = $source_height = $info['width'];
+              $source_x = 0;
+              $source_y = round(($info['height'] - $info['width']) / 2);
+          }
+          if ($width) {
+              $height = $width;
+          } else {
+              $width = $height;
+          }
+      }
+
+      return ImageResize::image_gd_resize($source, $destination, $width, $height,  $source_x, $source_y, $source_width, $source_height);
+  }
+  
   
   /**
    * GD2 has to be available on the system
@@ -78,7 +110,7 @@ class ImageResize {
   /**
    * Scale an image to the specified size using GD.
    */
-  function image_gd_resize($source, $destination, $width, $height) {
+  function image_gd_resize($source, $destination, $width, $height, $source_x = 0, $source_y = 0, $source_width = null, $source_height = null) {
     if (!file_exists($source)) {
       return false;
     }
@@ -92,10 +124,13 @@ class ImageResize {
     if (!$im) {
       return false;
     }
-
-
+    
+    /* Get source dimensions from GD info is not passed as parameters. */
+    $source_width  = is_null($source_width)  ? $info['width']  : $source_width;
+    $source_height = is_null($source_height) ? $info['height'] : $source_height;
+    
     $res = imageCreateTrueColor($width, $height);
-    imageCopyResampled($res, $im, 0, 0, 0, 0, $width, $height, $info['width'], $info['height']);
+    imageCopyResampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
     $result = ImageResize::image_gd_close($res, $destination, $info['extension']);
 
     imageDestroy($res);

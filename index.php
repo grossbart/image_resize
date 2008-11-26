@@ -51,28 +51,38 @@ function image_resize_scale($path) {
     $server_path = FROG_ROOT  . "/" . join("/", $params);
     
     // Dissect filename to find dimension information
-    if (preg_match('#(.+)\.([0-9]+)x?\.([a-z]+)$#i', $namepart, $match)) {
+    if (preg_match('#(.+)\.([0-9]+)x?(c?)\.([a-z]+)$#i', $namepart, $match)) {
         // imagename.230.jpg or imagename.230x.jpg
-        $filename = $match[1].".".$match[3];
-        $width  = (int)$match[2];
-        $height = NULL;
-    } else if (preg_match('#(.+)\.x([0-9]+)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.x150.jpg
-        $filename = $match[1].".".$match[3];
-        $width  = NULL;
-        $height = (int)$match[2];
-    } else if (preg_match('#(.+)\.([0-9]+)x([0-9]+)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.230x150.jpg
+        //imagename.230c.jpg or imagename.230xc.jpg
         $filename = $match[1].".".$match[4];
         $width  = (int)$match[2];
+        $height = NULL;
+        $crop   = 'c' == $match[3];
+    } else if (preg_match('#(.+)\.x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
+        // imagename.x150.jpg
+        // imagename.x150c.jpg
+        $filename = $match[1].".".$match[4];
+        $width  = NULL;
+        $height = (int)$match[2];
+        $crop   = 'c' == $match[3];
+    } else if (preg_match('#(.+)\.([0-9]+)x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
+        // imagename.230x150.jpg
+        // imagename.230x150c.jpg
+        $filename = $match[1].".".$match[5];
+        $width  = (int)$match[2];
         $height = (int)$match[3];
+        $crop   = 'c' == $match[4];
     } else {
         // no resizing, fail silently
         return FALSE;
     }
 
     if (ImageResize::gd_available()) {
-        ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+        if ($crop) {
+            ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+        } else {
+            ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+        }
     }
 }
 
