@@ -28,10 +28,9 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  */
 function image_resize_try_resizing() {
     $path = $_SERVER['QUERY_STRING'];
-    if (preg_match('#^public\/.+\.(jpg|jpeg|gif|png)#i', $path)) {
-        // If the requested file is within the /public folder
-        // and is an accepted format, resize and redirect to the
-        // newly created image.
+    if (preg_match('#^.+\.(jpg|jpeg|gif|png)$#i', $path)) {
+        // If requested file is an accepted format, resize and redirect 
+        // to the newly created image.
         image_resize_scale($path);
         header('Location: '. URL_PUBLIC . "/" . $path);
         // Exit here to prevent a page not found message
