@@ -36,9 +36,7 @@ class ImageResize {
       if ($width > $info['width'] && $height > $info['height']) {
           return false;
       }
-      
-      $aspect = $info['height'] / $info['width'];
-      
+            
       /* If we are square. */
       if (!$height || !$width || $height == $width) {
           if ($info['width'] > $info['height']) {
@@ -55,7 +53,29 @@ class ImageResize {
           } else {
               $width = $height;
           }
+      /* We are not square. */
+      } else {
+
+          $x_ratio = $width / $info['width'];
+          $y_ratio = $height / $info['height'];
+
+          if (($x_ratio * $info['width']) >= $width  && ($x_ratio * $info['height']) >= $height) {
+              $aspect  = $width / $height;
+              $x_ratio * $info['width'];
+              $source_width  = $info['width'];
+              $source_height = round($source_width / $aspect);
+              $source_x = 0;
+              $source_y = round(($info['height'] - $source_height) / 2);
+          } else {
+              $aspect  = $height / $width;
+              $source_height = $info['height'];
+              $source_width  = round($source_height / $aspect);
+              $source_x = round(($info['width'] - $source_width) / 2);
+              $source_y = 0;
+
+          }
       }
+
 
       return ImageResize::image_gd_resize($source, $destination, $width, $height,  $source_x, $source_y, $source_width, $source_height);
   }
