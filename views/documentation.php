@@ -36,16 +36,25 @@
 
 <p><code>&lt;img src="public/images/flower.<strong>230x150</strong>.jpg" alt="" /&gt;</code></p>
 
-<p>This tells the plugin to generate an image that fits within the width of 230 and the height of 150. It is possible to use only one parameter as an argument:</p>
+<p>This tells the plugin to generate an image that fits within the width of 230 and the height of 150 while keeping the aspect ratio intact.</p>
+
+<p>If you want to crop the image to the specified dimensions, you can add the option <code>c</code> to the end of the dimension identifier like this:</p>
+
+<p><code>&lt;img src="public/images/flower.230x150c.jpg" alt="" /&gt;</code></p>
+
+<p>This will output an image that is exactly 230x150 pixels in size, but it also means that part of the original image will not be shown.</p>
+
+<p>It is possible to use only one parameter as an argument:</p>
 
 <ul>
     <li><code>&lt;img src="public/images/flower.<strong>230</strong>.jpg" alt="" /&gt;</code> (resize to width)</li>
     <li><code>&lt;img src="public/images/flower.<strong>x150</strong>.jpg" alt="" /&gt;</code> (resize to height)</li>
+    <li><code>&lt;img src="public/images/flower.100c.jpg" alt="" /&gt;</code> (crop to square)</li>
 </ul>
 
-<p>Since version 1.1.0 you can also use a PHP-function to create the image tags:</p>
+<p>Since version 1.1 you can also use a PHP-function to create the image tags. This function has changed in 1.2 to allow for more options like cropping. Calling it with version 1.1 arguments still works but is deprecated. Use these options from now on:</p>
 
-<p><code>&lt;?php echo image_resize_image_tag($path_to_file, $width = NULL, $height = NULL, $options = array()); ?&gt;</code></p>
+<p><code>&lt;?php echo image_resize_image_tag($path_to_file, array("width"=&gt;100, "height"=&gt;50, "crop"=&gt;TRUE), array("alt"=&gt;"Beautiful flower", "class"=&gt;"photo")) ?&gt;</code></p>
 
 <p>Of course the original file (<code>flower.jpg</code>) has to exist. The thumbnails will be created in the same folder as the original file.</p>
 
