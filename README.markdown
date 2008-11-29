@@ -11,7 +11,7 @@ About
 
 With the Image Resize plugin enabled, you can easily create thumbnails of your images.
 
-It was inspired by the Drupal Image Cache module. The image resize functions are taken from Drupal and adapted for Frog CMS.
+It was inspired by the Drupal Image Cache module. The image resize functions are taken from Drupal and have been adapted for Frog CMS.
 
 
 How to use
@@ -27,10 +27,19 @@ You can now add a dimension identifier directly before the file extension like t
 
 `<img src="public/images/flower.230x150.jpg" alt="" />`
 
-This tells the plugin to generate an image that fits within the width of 230 and the height of 150. It is possible to use only one parameter as an argument:
+This tells the plugin to generate an image that fits within the width of 230 and the height of 150 while keeping the aspect ratio intact.
+
+If you want to crop the image to the specified dimensions, you can add the option `c` to the end of the dimension identifier like this:
+
+`<img src="public/images/flower.230x150c.jpg" alt="" />`
+
+This will output an image that is exactly 230x150 pixels in size, but it also means that part of the original image will not be shown.
+
+It is possible to use only one parameter as an argument:
 
 * `<img src="public/images/flower.230.jpg" alt="" />` (resize to width)
 * `<img src="public/images/flower.x150.jpg" alt="" />` (resize to height)
+* `<img src="public/images/flower.100c.jpg" alt="" />` (crop to square)
 
 Since version 1.1.0 you can also use a PHP-function to create the image tags:
 
@@ -43,6 +52,7 @@ Contributors
 ------------
 
 * Peter Gassner <peter@naehrstoff.ch>
+* Mika Tuupola <tuupola@appelsiini.net>
 
 
 Changelog
