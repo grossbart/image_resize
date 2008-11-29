@@ -88,16 +88,43 @@ function image_resize_scale($path) {
 
 /**
  * Helper function to create an image tag
+ *
+ * @param string image path
+ * @param array image options: "width", "height" or "crop"
+ * @param array html attributes that will be added to the link tag
  */
- 
-function image_resize_image_tag($image_path, $width = NULL, $height = NULL, $options = array()) {
-    if (!array_key_exists("alt", $options)) $options['alt'] = '';
-    $html_options = "";
-    foreach ($options as $key => $value) {
-      $html_options .= "$key='$value' ";
+
+function image_resize_image_tag($image_path, $options = array(), $html_attributes = array()) {
+
+    // Maintain backwards compatibility
+    $args = func_get_args();
+    if (is_null($args[1])) {
+        $options = array();
     }
-    $image_path = preg_replace('#(.+)\.(jpg|jpeg|gif|png)$#i', '${1}.'.$width.'x'.$height.'.${2}', $image_path);
-    return "<img src='$image_path' $html_options/>";
+    if (is_numeric($args[1])) {
+        $options = array();
+        $options['width'] = $args[1];
+    }
+    if (is_numeric($args[2])) {
+        $options['height'] = $args[2];
+    }
+    if (is_array($args[3])) {
+      $html_attributes = $args[3];
+    }
+
+    // Assign values
+    $width  = (array_key_exists('width',  $options)) ? $options['width'] : NULL;
+    $height = (array_key_exists('height', $options)) ? $options['height'] : NULL;
+    $crop   = (array_key_exists('crop',   $options)) ? 'c' : "";
+
+    if (!array_key_exists("alt", $html_attributes)) $html_attributes['alt'] = '';
+
+    $attributes_string = " ";
+    foreach ($html_attributes as $key => $value) {
+        $attributes_string .= "$key='$value' ";
+    }
+    $image_path = preg_replace('#(.+)\.(jpg|jpeg|gif|png)$#i', '${1}.'.$width.'x'.$height.$crop.'.${2}', $image_path);
+    return "<img src='$image_path'$attributes_string/>";
 }
 
 

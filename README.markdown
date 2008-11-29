@@ -41,9 +41,9 @@ It is possible to use only one parameter as an argument:
 * `<img src="public/images/flower.x150.jpg" alt="" />` (resize to height)
 * `<img src="public/images/flower.100c.jpg" alt="" />` (crop to square)
 
-Since version 1.1.0 you can also use a PHP-function to create the image tags:
+Since version 1.1 you can also use a PHP-function to create the image tags. This function has changed in 1.2 to allow for more options like cropping. Calling it with version 1.1 arguments still works but is deprecated. Use these options from now on:
 
-`<?php echo image_resize_image_tag($path_to_file, $width = NULL, $height = NULL, $options = array()); ?>`
+`<?php echo image_resize_image_tag($path_to_file, array("width"=>100, "height"=>50, "crop"=>TRUE), array("alt"=>"Beautiful flower", "class"=>"photo")) ?>`
 
 Of course the original file (flower.jpg) has to exist. The thumbnails will be created in the same folder as the original file.
 
@@ -58,6 +58,10 @@ Contributors
 Changelog
 ---------
 
+* 1.2.0 (November 29, 2008)
+	* Added a cropping option to crop images to any dimension.
+	* Removed restriction where images needed to be in public/ directory.
+	* Changed image_resize_image_tag function to allow more options while keeping backwards compatibility.
 * 1.1.1 (November 21, 2008)
 	* Changed name of Github repository to prevent errors when installing the plugin.
 * 1.1.0 (November 12, 2008)
