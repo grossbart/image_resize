@@ -31,6 +31,7 @@ function image_resize_try_resizing() {
     if (preg_match('#^.+\.(jpg|jpeg|gif|png)$#i', $path)) {
         // If requested file is an accepted format, resize and redirect 
         // to the newly created image.
+        $path = ltrim($path,'QS=');
         image_resize_scale($path);
         header('Location: '. URL_PUBLIC . "/" . $path);
         // Exit here to prevent a page not found message
