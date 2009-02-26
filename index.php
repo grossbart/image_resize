@@ -27,13 +27,12 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  * resize the image.
  */
 function image_resize_try_resizing() {
-    $path = $_SERVER['QUERY_STRING'];
-    if (preg_match('#^.+\.(jpg|jpeg|gif|png)$#i', $path)) {
+    if (preg_match('#^.+\.(jpg|jpeg|gif|png)$#i', CURRENT_URI)) {
+        
         // If requested file is an accepted format, resize and redirect 
         // to the newly created image.
-        $path = ltrim($path,'QS=');
-        image_resize_scale($path);
-        header('Location: '. URL_PUBLIC . "/" . $path);
+        image_resize_scale(CURRENT_URI);
+        header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
         // Exit here to prevent a page not found message
         exit();
     }
