@@ -31,10 +31,11 @@ function image_resize_try_resizing() {
         
         // If requested file is an accepted format, resize and redirect 
         // to the newly created image.
-        image_resize_scale(CURRENT_URI);
-        header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
-        // Exit here to prevent a page not found message
-        exit();
+        if (image_resize_scale(CURRENT_URI)) {
+            header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
+            // Exit here to prevent a page not found message
+            exit();            
+        }
     }
 }
 
@@ -73,14 +74,14 @@ function image_resize_scale($path) {
         $crop   = 'c' == $match[4];
     } else {
         // no resizing, fail silently
-        return FALSE;
+        return false;
     }
 
     if (ImageResize::gd_available()) {
         if ($crop) {
-            ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+            return ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
         } else {
-            ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+            return ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
         }
     }
 }
