@@ -6,12 +6,12 @@ Plugin::setInfos(array(
 	'id'          => 'image_resize',
 	'title'       => 'Image Resize',
 	'description' => 'Allows for dynamic resizing of images.',
-	'version'     => '1.2.0',
+	'version'     => '1.2.1',
 	'license'     => 'GPL 3.0',
 	'author'      => 'Peter Gassner',
 	'website'     => 'http://www.naehrstoff.ch/code/image-resize-for-frog',
   'update_url'  => 'http://frog.naehrstoff.ch/plugin-versions.xml',
-	'require_frog_version' => '0.9.4'
+	'require_frog_version' => '0.9.5'
 ));
 
 // Listen for page_not_found messages

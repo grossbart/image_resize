@@ -58,6 +58,9 @@ Contributors
 Changelog
 ---------
 
+* 1.2.1 (February 28, 2009)
+	* Fix compatibility between 0.9.4, 0.9.5 and SVN.
+	* Prevent endless loop when trying to resize nonexistent image.
 * 1.2.0 (November 29, 2008)
 	* Added a cropping option to crop images to any dimension.
 	* Removed restriction where images needed to be in public/ directory.
