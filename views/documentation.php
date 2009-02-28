@@ -59,6 +59,15 @@
 <p>Of course the original file (<code>flower.jpg</code>) has to exist. The thumbnails will be created in the same folder as the original file.</p>
 
 
+<h3>Special cases</h3>
+
+<p>If you want to use image_resize with Frog's page_not_found plugin, you will have to include the following code at the top of your customized page_not_found page:</p>
+
+<p><code>&lt;?php image_resize_try_resizing() ?&gt;</code></p>
+
+<p>This is necessary because the page_not_found plugin will be called before image_resize, so the call will never make it to image_resize which in turn can't convert the image.</p>
+
+
 <h3>How does it work?</h3>
 
 <p>This module relies on some <code>mod_rewrite</code> magic: If the requested thumbnail exists, Apache knows this and delivers the file to the browser. If the file doesn't exist, Apache hands control over to Frog CMS.</p>

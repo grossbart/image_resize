@@ -48,6 +48,16 @@ Since version 1.1 you can also use a PHP-function to create the image tags. This
 Of course the original file (flower.jpg) has to exist. The thumbnails will be created in the same folder as the original file.
 
 
+Special cases
+-------------
+
+If you want to use image_resize with Frog's page_not_found plugin, you will have to include the following code at the top of your customized page_not_found page:
+
+`<?php image_resize_try_resizing() ?>`
+
+This is necessary because the page_not_found plugin will be called before image_resize, so the call will never make it to image_resize which in turn can't convert the image.
+
+
 Contributors
 ------------
 
