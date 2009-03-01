@@ -11,7 +11,7 @@ Plugin::setInfos(array(
 	'author'      => 'Peter Gassner',
 	'website'     => 'http://www.naehrstoff.ch/code/image-resize-for-frog',
   'update_url'  => 'http://frog.naehrstoff.ch/plugin-versions.xml',
-	'require_frog_version' => '0.9.5'
+	'require_frog_version' => '0.9.4'
 ));
 
 // Listen for page_not_found messages

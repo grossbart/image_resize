@@ -1,9 +1,9 @@
 Image Resize for Frog
 =====================
 
-This plugin has been tested with Frog version 0.9.4. It's homepage is:
+This plugin has been tested with Frog version 0.9.4 and 0.9.5. It's homepage is:
 
-`http://www.naehrstoff.ch/code/image-resize-for-frog`
+`http://github.com/naehrstoff/image_resize/tree/master`
 
 
 About
@@ -48,14 +48,26 @@ Since version 1.1 you can also use a PHP-function to create the image tags. This
 Of course the original file (flower.jpg) has to exist. The thumbnails will be created in the same folder as the original file.
 
 
-Special cases
--------------
+Trouble shooting
+-----------------
 
-If you want to use image_resize with Frog's page_not_found plugin, you will have to include the following code at the top of your customized page_not_found page:
+### How to use Image Resize together with the Page Not Found plugin
+
+If you want to use Image Resize with Frog's Page Not Found plugin, you will have to include the following code at the top of your customized Page Not Found page:
 
 `<?php image_resize_try_resizing() ?>`
 
-This is necessary because the page_not_found plugin will be called before image_resize, so the call will never make it to image_resize which in turn can't convert the image.
+This is necessary because the Page Not Found plugin will be called before Image Resize, so the call will never make it to Image Resize which in turn can't convert the image.
+
+For some reason you will have to reload a page twice before the image appears.
+
+### How to activate mod_rewrite
+
+To get mod_rewrite to work, you'll have to make sure that it is:
+
+* Possible to use mod_rewrite on your server
+* You rename the file `_.htaccess` to `.htaccess` (without the leading underscore)
+* You set the variable `USE_MOD_REWRITE` in Frog's config.php to true.
 
 
 Contributors

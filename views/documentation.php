@@ -59,13 +59,28 @@
 <p>Of course the original file (<code>flower.jpg</code>) has to exist. The thumbnails will be created in the same folder as the original file.</p>
 
 
-<h3>Special cases</h3>
+<h3>Trouble shooting</h3>
 
-<p>If you want to use image_resize with Frog's page_not_found plugin, you will have to include the following code at the top of your customized page_not_found page:</p>
+<h4>How to use Image Resize together with the Page Not Found plugin</h4>
+
+<p>If you want to use Image Resize with Frog&#8217;s Page Not Found plugin, you will have to include the following code at the top of your customized Page Not Found page:</p>
 
 <p><code>&lt;?php image_resize_try_resizing() ?&gt;</code></p>
 
-<p>This is necessary because the page_not_found plugin will be called before image_resize, so the call will never make it to image_resize which in turn can't convert the image.</p>
+<p>This is necessary because the Page Not Found plugin will be called before Image Resize, so the call will never make it to Image Resize which in turn can&#8217;t convert the image.</p>
+
+<p>For some reason you will have to reload a page twice before the image appears.</p>
+
+
+<h4>How to activate mod_rewrite</h4>
+
+<p>To get mod_rewrite to work, you&#8217;ll have to make sure that it is:</p>
+
+<ul>
+<li>Possible to use mod_rewrite on your server</li>
+<li>You rename the file <code>_.htaccess</code> to <code>.htaccess</code> (without the leading underscore)</li>
+<li>You set the variable <code>USE_MOD_REWRITE</code> in Frog&#8217;s config.php to true.</li>
+</ul>
 
 
 <h3>How does it work?</h3>
