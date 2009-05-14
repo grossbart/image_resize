@@ -6,14 +6,21 @@
 <h3>Status</h3>
 
 <?php if ($gd_status && $mod_rewrite_status): ?>
-    <p>All requirements are met, this module should work as expected.</p>
+    <p>All requirements seem to be met, this module should work as expected. If you have problems with blank thumbnails, please check whether all image formats are supported by your system.</p>
 <?php else: ?>
     <p>Some problems were encountered, this module may not work correctly.</p>
 <?php endif; ?>
 
 <ul>
     <?php if ($gd_status): ?>
-        <li style="color: #3a3">The GD library is available.</li>
+        <li style="color: #3a3">The GD library is available.
+        <ul>
+          <?php foreach(gd_info() as $key => $value): ?>
+          <?php if ($value == '') $value = "0" ?>
+          <li style="padding-left: 24px; color: #666; font-size: 0.8em"><?php echo "$key: $value" ?></li>
+          <?php endforeach; ?>
+         </ul>
+        </li>
     <?php else: ?>
         <li style="color: #a33">The GD library is not available on this system. Refer to the <a href="http://www.php.net/gd">PHP GD documentation</a> for help.</li>        
     <?php endif; ?>
