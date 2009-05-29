@@ -127,14 +127,14 @@ class ImageResize {
         } else {
             $extensions = array(1 => 'gif', 2 => 'jpeg', 3 => 'png', 15 => 'wbmp');
             $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
-            $format = ($extension=="jpg") ? "jpeg" : $extension
+            $format = ($extension=="jpg") ? "jpeg" : $extension;
             $details = array('width'     => $data[0],
                              'height'    => $data[1],
                              'extension' => $extension,
                              'format'    => $format,
                              'mime_type' => $data['mime'],
                              'lastmod'   => filemtime($file));
-            self::$infoCache[$file] = $details
+            self::$infoCache[$file] = $details;
             return $details;
         }
     }
@@ -199,7 +199,7 @@ class ImageResize {
             // If Frog is in debug mode, don't output to a file
             $destination = NULL;
             $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
-            header('Content-Type: image/'.$types[$format]);
+            header('Content-Type: image/'.$types[$extension]);
         }
         return $close_func($res, $destination);
     }
