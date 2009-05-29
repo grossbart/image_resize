@@ -118,7 +118,7 @@ class ImageResize {
         // getimagesize() can apparently be expensive, so we'll cache results,
         // checking against filemtime() to make sure the file is still the same
         clearstatcache();
-        if (isset(self::$infoCache[$file]) && self::$infoCache[$file]['lastmod']===filemtime($file)) {
+        if (isset(self::$infoCache[$file]) && self::$infoCache[$file]['lastmod']===@filemtime($file)) {
             return self::$infoCache[$file];
         }
         
@@ -137,7 +137,7 @@ class ImageResize {
                              'extension' => $extension,
                              'format'    => $format,
                              'mime_type' => $data['mime'],
-                             'lastmod'   => filemtime($file));
+                             'lastmod'   => @filemtime($file));
             self::$infoCache[$file] = $details;
             return $details;
         }
