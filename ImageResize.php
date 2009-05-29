@@ -90,7 +90,8 @@ class ImageResize {
     if (extension_loaded('gd') && 
         function_exists('imagecreatetruecolor') && 
         function_exists('imagecopyresampled') &&
-        function_exists('imagedestroy')
+        function_exists('imagedestroy') &&
+        function_exists('getimagesize')
        ) {
         return true;
     }
