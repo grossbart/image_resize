@@ -28,7 +28,7 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  */
 function image_resize_try_resizing() {
     die("It compiles!");
-    if (preg_match('#^.+\.(jpg|jpeg|gif|png)$#i', CURRENT_URI)) {
+    if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI)) {
         
         // If requested file is an accepted format, resize and redirect 
         // to the newly created image.
