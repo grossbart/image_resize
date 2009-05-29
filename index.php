@@ -28,6 +28,10 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  */
 function image_resize_try_resizing() {
     die("It compiles!");
+    // Check that gd library is available
+    if (!ImageResize::gd_available()) {
+        return false;
+    }    
     if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI)) {
         
         // If requested file is an accepted format, resize and redirect 
@@ -78,13 +82,13 @@ function image_resize_scale($path) {
         return false;
     }
 
-    if (ImageResize::gd_available()) {
+    
         if ($crop) {
             return ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
         } else {
             return ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
         }
-    }
+
 }
 
 

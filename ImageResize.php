@@ -87,11 +87,12 @@ class ImageResize {
    * @return boolean
    */
   public function gd_available() {
-    if ($check = get_extension_funcs('gd')) {
-      if (in_array('imagegd2', $check)) {
-        // GD2 support is available.
+    if (extension_loaded('gd') && 
+        function_exists('imagecreatetruecolor') && 
+        function_exists('imagecopyresampled') &&
+        function_exists('imagedestroy')
+       ) {
         return true;
-      }
     }
     return false;
   }
