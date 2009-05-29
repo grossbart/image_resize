@@ -40,7 +40,7 @@ function image_resize_try_resizing() {
         }
         
         // If requested file is an accepted format, create the new image 
-        if (image_resize_scale(CURRENT_URI, $format) && !DEBUG) {
+        if (image_resize_scale(CURRENT_URI) && !DEBUG) {
             // If Frog isn't debugging, it writes to a file; redirect to it
             header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
             // Exit here to prevent a page not found message
@@ -54,7 +54,7 @@ function image_resize_try_resizing() {
  * Parse the filename of the requested image
  * for size information and resize accordingly.
  */
-function image_resize_scale($path, $format) {
+function image_resize_scale($path) {
     $params      = explode("/", $path);
     $namepart    = array_pop($params);
     $public_path = URL_PUBLIC . "/" . join("/", $params);
@@ -90,14 +90,6 @@ FILENAME_PATTERN;
         return false;
     }
 
-
-    if (DEBUG) {
-        // If Frog is in debug mode, don't output to a file
-        $destination = NULL;
-        $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
-        header('Content-Type: image/'.$types[$format]);
-    }
-    
     if ($crop) {
         return ImageResize::image_scale_cropped($source, $destination, $width, $height);
     } else {
@@ -148,34 +140,3 @@ function image_resize_image_tag($image_path, $options = array(), $html_attribute
     return "<img src='$image_path'$attributes_string/>";
 }
 
-
-
-
-/*
-    // Dissect filename to find dimension information
-    if (preg_match('#(.+)\.([0-9]+)x?(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.230.jpg or imagename.230x.jpg
-        //imagename.230c.jpg or imagename.230xc.jpg
-        $filename = $match[1].".".$match[4];
-        $width  = (int)$match[2];
-        $height = NULL;
-        $crop   = 'c' == $match[3];
-    } else if (preg_match('#(.+)\.x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.x150.jpg
-        // imagename.x150c.jpg
-        $filename = $match[1].".".$match[4];
-        $width  = NULL;
-        $height = (int)$match[2];
-        $crop   = 'c' == $match[3];
-    } else if (preg_match('#(.+)\.([0-9]+)x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.230x150.jpg
-        // imagename.230x150c.jpg
-        $filename = $match[1].".".$match[5];
-        $width  = (int)$match[2];
-        $height = (int)$match[3];
-        $crop   = 'c' == $match[4];
-    } else {
-        // no resizing, fail silently
-        return false;
-    }
-*/
