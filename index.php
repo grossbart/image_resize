@@ -31,7 +31,7 @@ function image_resize_try_resizing() {
     if (!ImageResize::gd_available()) {
         return false;
     }    
-    if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI, $match)) {
+    if (preg_match('#\.(jpe?g|gif|png|wbmp)$#i', CURRENT_URI, $match)) {
         $format = ($match[1]=="jpg") ? "jpeg" : $match[1];
         
         // Check to make sure requested format is supported by GD
@@ -76,12 +76,10 @@ function image_resize_scale($path, $format) {
  x?(\d+)?     # height
  (c)?         # optional crop
  (\.[a-z]+)   # source file extension
+
 \$/ix
 FILENAME_PATTERN;
     if (preg_match($pattern, $namepart, $match)) {
-        /*header("Content-Type: text/plain");
-        var_export($match);
-        exit;*/
         $filename = $match[1].$match[5];
         $width    = (int) $match[2];
         $height   = (int) $match[3];
@@ -96,7 +94,7 @@ FILENAME_PATTERN;
     if (DEBUG) {
         // If Frog is in debug mode, don't output to a file
         $destination = NULL;
-        $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp','xpm'=>'x-xpixmap');
+        $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
         header('Content-Type: image/'.$types[$format]);
     }
     
