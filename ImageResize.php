@@ -6,10 +6,15 @@
  */
 
 class ImageResize {
-
+  protected static $infoCache = array();
+  
   public static function image_scale($source, $destination, $width, $height)
   {
       $info = self::image_get_info($source);
+      if (!$info) {
+        // file isn't an image
+        return false;
+      }
 
       // don't scale up
       if ($width > $info['width'] && $height > $info['height']) {
@@ -109,23 +114,35 @@ class ImageResize {
    *      'mime_type': image's MIME type ('image/jpeg', 'image/gif', etc.)
    */
   public static function image_get_info($file) {
-    if (!is_file($file)) {
+    if (!file_exists($file)) {
       return false;
     }
-
-    $details = false;
-    $data = @getimagesize($file);
-
-    if (is_array($data)) {
-      $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
-      $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
-      $details = array('width'     => $data[0],
-                       'height'    => $data[1],
-                       'extension' => $extension,
-                       'mime_type' => $data['mime']);
+    // getimagesize() can apparently be expensive, so we'll cache results,
+    // checking against filemtime() to make sure the file is still the same
+    clearstatcache();
+    if (isset(self::$infoCache[$file]) && self::$infoCache[$file]['lastmod']===filemtime($file)) {
+        return self::$infoCache[$file];
     }
-
-    return $details;
+    
+    // Gather metadata about the requested image file
+    $data = @getimagesize($file);
+    // If file isn't an image, stop
+    if (!$data) {
+        self::$infoCache[$file] = false;
+        return false;
+    } else {
+        $extensions = array(1 => 'gif', 2 => 'jpeg', 3 => 'png', 15 => 'wbmp');
+        $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
+        $format = ($extension=="jpg") ? "jpeg" : $extension
+        $details = array('width'     => $data[0],
+                         'height'    => $data[1],
+                         'extension' => $extension,
+                         'format'    => $format,
+                         'mime_type' => $data['mime'],
+                         'lastmod'   => filemtime($file));
+        self::$infoCache[$file] = $details
+        return $details;
+    }
   }
   
   
@@ -183,6 +200,12 @@ class ImageResize {
     $close_func = 'image'. $extension;
     if (!function_exists($close_func)) {
       return false;
+    }
+    if (DEBUG) {
+        // If Frog is in debug mode, don't output to a file
+        $destination = NULL;
+        $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
+        header('Content-Type: image/'.$types[$format]);
     }
     return $close_func($res, $destination);
   }
