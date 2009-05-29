@@ -86,6 +86,8 @@ FILENAME_PATTERN;
         $width    = (int) $match[2];
         $height   = (int) $match[3];
         $crop     = 'c' == $match[4];
+        $source      = $server_path."/".$filename;
+        $destination = $server_path."/".$namepart;
     } else {
         return false;
     }
@@ -96,15 +98,12 @@ FILENAME_PATTERN;
         $destination = NULL;
         $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp','xpm'=>'x-xpixmap');
         header('Content-Type: image/'.$types[$format]);
-                
-    } else {
-        $destination = $server_path."/".$namepart;
     }
     
     if ($crop) {
-        return ImageResize::image_scale_cropped($server_path."/".$filename, $destination, $width, $height);
+        return ImageResize::image_scale_cropped($source, $destination, $width, $height);
     } else {
-        return ImageResize::image_scale($server_path."/".$filename, $destination, $width, $height);
+        return ImageResize::image_scale($source, $destination, $width, $height);
     }
 
 }
