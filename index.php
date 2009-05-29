@@ -34,8 +34,12 @@ function image_resize_try_resizing() {
     if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI, $match)) {
         $format = ($match[1]=="jpg") ? "jpeg" : $match[1];
         
-        // If requested file is an accepted format, resize and redirect 
-        // to the newly created image.
+        // Check to make sure requested format is supported by GD
+        if (!function_exists('imagecreatefrom'.$format) || !function_exists('image'.$format)) {
+            return false;
+        }
+        
+        // If requested file is an accepted format, create the new image 
         if (image_resize_scale(CURRENT_URI, $format) && !DEBUG) {
             // If Frog isn't debugging, it writes to a file; redirect to it
             header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
