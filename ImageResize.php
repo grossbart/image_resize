@@ -150,12 +150,12 @@ class ImageResize {
     $source_width  = is_null($source_width)  ? $info['width']  : $source_width;
     $source_height = is_null($source_height) ? $info['height'] : $source_height;
     
-    $res = imageCreateTrueColor($width, $height);
-    imageCopyResampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
+    $res = imagecreatetruecolor($width, $height);
+    imagecopyresampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
     $result = self::image_gd_close($res, $destination, $info['extension']);
 
-    imageDestroy($res);
-    imageDestroy($im);
+    imagedestroy($res);
+    imagedestroy($im);
 
     return $result;
   }
