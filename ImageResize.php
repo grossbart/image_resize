@@ -34,6 +34,10 @@ class ImageResize {
   
     public static function image_scale_cropped($source, $destination, $width, $height) {
         $info = self::image_get_info($source);
+        if (!$info) {
+            // file isn't an image
+            return false;
+        }
 
         // don't scale up
         if ($width > $info['width'] && $height > $info['height']) {
