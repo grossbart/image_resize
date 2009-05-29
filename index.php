@@ -3,15 +3,15 @@
 require_once("ImageResize.php");
 
 Plugin::setInfos(array(
-	'id'          => 'image_resize',
-	'title'       => 'Image Resize',
-	'description' => 'Allows for dynamic resizing of images.',
-	'version'     => '1.2.1',
-	'license'     => 'GPL 3.0',
-	'author'      => 'Peter Gassner',
-	'website'     => 'http://www.naehrstoff.ch/code/image-resize-for-frog',
-  'update_url'  => 'http://frog.naehrstoff.ch/plugin-versions.xml',
-	'require_frog_version' => '0.9.4'
+    'id'          => 'image_resize',
+    'title'       => 'Image Resize',
+    'description' => 'Allows for dynamic resizing of images.',
+    'version'     => '1.2.1',
+    'license'     => 'GPL 3.0',
+    'author'      => 'Peter Gassner',
+    'website'     => 'http://www.naehrstoff.ch/code/image-resize-for-frog',
+    'update_url'  => 'http://frog.naehrstoff.ch/plugin-versions.xml',
+    'require_frog_version' => '0.9.4'
 ));
 
 // Listen for page_not_found messages
@@ -83,11 +83,11 @@ function image_resize_scale($path) {
     }
 
     
-        if ($crop) {
-            return ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
-        } else {
-            return ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
-        }
+    if ($crop) {
+        return ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+    } else {
+        return ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+    }
 
 }
 
