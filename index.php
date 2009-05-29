@@ -27,16 +27,17 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  * resize the image.
  */
 function image_resize_try_resizing() {
-    die("It compiles!");
     // Check that gd library is available
     if (!ImageResize::gd_available()) {
         return false;
     }    
-    if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI)) {
+    if (preg_match('#\.(jpe?g|gif|png|wbmp|xpm)$#i', CURRENT_URI, $match)) {
+        $format = ($match[1]=="jpg") ? "jpeg" : $match[1];
         
         // If requested file is an accepted format, resize and redirect 
         // to the newly created image.
-        if (image_resize_scale(CURRENT_URI)) {
+        if (image_resize_scale(CURRENT_URI, $format) && !DEBUG) {
+            // If Frog isn't debugging, it writes to a file; redirect to it
             header('Location: '. URL_PUBLIC . "/" . CURRENT_URI);
             // Exit here to prevent a page not found message
             exit();            
@@ -49,7 +50,7 @@ function image_resize_try_resizing() {
  * Parse the filename of the requested image
  * for size information and resize accordingly.
  */
-function image_resize_scale($path) {
+function image_resize_scale($path, $format) {
     $params      = explode("/", $path);
     $namepart    = array_pop($params);
     $public_path = URL_PUBLIC . "/" . join("/", $params);
@@ -82,11 +83,20 @@ function image_resize_scale($path) {
         return false;
     }
 
+    if (DEBUG) {
+        // If Frog is in debug mode, don't output to a file
+        $destination = NULL;
+        $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp','xpm'=>'x-xpixmap');
+        header('Content-Type: image/'.$types[$format]);
+                
+    } else {
+        $destination = $server_path."/".$namepart;
+    }
     
     if ($crop) {
-        return ImageResize::image_scale_cropped($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+        return ImageResize::image_scale_cropped($server_path."/".$filename, $destination, $width, $height);
     } else {
-        return ImageResize::image_scale($server_path."/".$filename, $server_path."/".$namepart, $width, $height);
+        return ImageResize::image_scale($server_path."/".$filename, $destination, $width, $height);
     }
 
 }
