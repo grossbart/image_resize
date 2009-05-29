@@ -61,31 +61,35 @@ function image_resize_scale($path, $format) {
     $server_path = FROG_ROOT  . "/" . join("/", $params);
     
     // Dissect filename to find dimension information
-    if (preg_match('#(.+)\.([0-9]+)x?(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.230.jpg or imagename.230x.jpg
-        //imagename.230c.jpg or imagename.230xc.jpg
-        $filename = $match[1].".".$match[4];
-        $width  = (int)$match[2];
-        $height = NULL;
-        $crop   = 'c' == $match[3];
-    } else if (preg_match('#(.+)\.x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.x150.jpg
-        // imagename.x150c.jpg
-        $filename = $match[1].".".$match[4];
-        $width  = NULL;
-        $height = (int)$match[2];
-        $crop   = 'c' == $match[3];
-    } else if (preg_match('#(.+)\.([0-9]+)x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
-        // imagename.230x150.jpg
-        // imagename.230x150c.jpg
-        $filename = $match[1].".".$match[5];
-        $width  = (int)$match[2];
-        $height = (int)$match[3];
-        $crop   = 'c' == $match[4];
+    $pattern = <<<FILENAME_PATTERN
+/^
+
+# Acceptable input examples (non-exhaustive):
+#  Width scaling:     file.200.jpg file.200x.jpg
+#  Height scaling:    file.x200.jpg
+#  Arbitrary scaling: file.200x200.jpg
+#  Cropping:          file.200c.jpg file.200x200c.jpg
+
+ (.+)         # source file name-part
+ \.(?!x?c?\.) # prevents "image..jpg" and so forth
+ (\d+)?       # width
+ x?(\d+)?     # height
+ (c)?         # optional crop
+ (\.[a-z]+)   # source file extension
+\$/ix
+FILENAME_PATTERN;
+    if (preg_match($pattern, $namepart, $match)) {
+        /*header("Content-Type: text/plain");
+        var_export($match);
+        exit;*/
+        $filename = $match[1].$match[5];
+        $width    = (int) $match[2];
+        $height   = (int) $match[3];
+        $crop     = 'c' == $match[4];
     } else {
-        // no resizing, fail silently
         return false;
     }
+
 
     if (DEBUG) {
         // If Frog is in debug mode, don't output to a file
@@ -148,3 +152,33 @@ function image_resize_image_tag($image_path, $options = array(), $html_attribute
 }
 
 
+
+
+/*
+    // Dissect filename to find dimension information
+    if (preg_match('#(.+)\.([0-9]+)x?(c?)\.([a-z]+)$#i', $namepart, $match)) {
+        // imagename.230.jpg or imagename.230x.jpg
+        //imagename.230c.jpg or imagename.230xc.jpg
+        $filename = $match[1].".".$match[4];
+        $width  = (int)$match[2];
+        $height = NULL;
+        $crop   = 'c' == $match[3];
+    } else if (preg_match('#(.+)\.x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
+        // imagename.x150.jpg
+        // imagename.x150c.jpg
+        $filename = $match[1].".".$match[4];
+        $width  = NULL;
+        $height = (int)$match[2];
+        $crop   = 'c' == $match[3];
+    } else if (preg_match('#(.+)\.([0-9]+)x([0-9]+)(c?)\.([a-z]+)$#i', $namepart, $match)) {
+        // imagename.230x150.jpg
+        // imagename.230x150c.jpg
+        $filename = $match[1].".".$match[5];
+        $width  = (int)$match[2];
+        $height = (int)$match[3];
+        $crop   = 'c' == $match[4];
+    } else {
+        // no resizing, fail silently
+        return false;
+    }
+*/
