@@ -9,12 +9,10 @@ class ImageResize {
     protected static $infoCache = array();
   
     public static function image_scale($source, $destination, $width, $height) {
-        $info = self::image_get_info($source);
-        if (!$info) {
+        if (!$info = self::image_get_info($source)) {
             // file isn't an image
             return false;
         }
-
         // don't scale up
         if ($width > $info['width'] && $height > $info['height']) {
             return false;
@@ -28,13 +26,11 @@ class ImageResize {
             $height = (int)min($height, $info['height']);
             $width = (int)round($height / $aspect);
         }
-
         return self::image_gd_resize($source, $destination, $width, $height);
     }
   
     public static function image_scale_cropped($source, $destination, $width, $height) {
-        $info = self::image_get_info($source);
-        if (!$info) {
+        if (!$info = self::image_get_info($source)) {
             // file isn't an image
             return false;
         }
@@ -59,7 +55,7 @@ class ImageResize {
                 $height = $width;
             } else {
                 $width = $height;
-          }
+            }
       /* We are not square. */
         } else {
             $x_ratio = $width / $info['width'];
@@ -127,7 +123,7 @@ class ImageResize {
         // If file isn't an image, stop
         if (!$data) {
             self::$infoCache[$file] = false;
-            return false;
+            return self::$infoCache[$file];
         } else {
             $extensions = array(1 => 'gif', 2 => 'jpeg', 3 => 'png', 15 => 'wbmp');
             $extension = array_key_exists($data[2], $extensions) ?  $extensions[$data[2]] : '';
@@ -139,7 +135,7 @@ class ImageResize {
                              'mime_type' => $data['mime'],
                              'lastmod'   => @filemtime($file));
             self::$infoCache[$file] = $details;
-            return $details;
+            return self::$infoCache[$file];
         }
     }
   
@@ -168,7 +164,7 @@ class ImageResize {
     
         $res = imagecreatetruecolor($width, $height);
         imagecopyresampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
-        $result = self::image_gd_close($res, $destination, $info['extension']);
+        $result = self::image_gd_write($res, $destination, $info['extension']);
 
         imagedestroy($res);
         imagedestroy($im);
@@ -193,10 +189,10 @@ class ImageResize {
     /**
      * GD helper to write an image resource to a destination file.
      */
-    public static function image_gd_close($res, $destination, $extension) {
+    public static function image_gd_write($res, $destination, $extension) {
         $extension = str_replace('jpg', 'jpeg', $extension);
-        $close_func = 'image'. $extension;
-        if (!function_exists($close_func)) {
+        $write_func = 'image'. $extension;
+        if (!function_exists($write_func)) {
             return false;
         }
         if (DEBUG) {
@@ -205,6 +201,6 @@ class ImageResize {
             $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
             header('Content-Type: image/'.$types[$extension]);
         }
-        return $close_func($res, $destination);
+        return $write_func($res, $destination);
     }
 }
