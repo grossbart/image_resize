@@ -75,11 +75,17 @@ Contributors
 
 * Peter Gassner <peter@naehrstoff.ch>
 * Mika Tuupola <tuupola@appelsiini.net>
+* J. King <jking@jkingweb.ca>
 
 
 Changelog
 ---------
 
+* 1.3.0 (Speculative)
+	* Require editor, developer or administrator permissions before resizing.
+	* 8-bit PNGs are no longer converted to 24-bit.
+	* Now outputs directly to the browser instead of file when Frog is in debug mode.
+	* Improved sanity checks.
 * 1.2.1 (February 28, 2009)
 	* Fix compatibility between 0.9.4, 0.9.5 and SVN.
 	* Prevent endless loop when trying to resize nonexistent image.
