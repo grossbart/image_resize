@@ -27,6 +27,12 @@ Plugin::addController('image_resize', 'Image Resize', '', FALSE);
  * resize the image.
  */
 function image_resize_try_resizing() {
+    // Require that visitor be logged in and has 
+    // permission to create files
+    AuthUser::load();
+    if (!AuthUser::hasPermission('administrator,developer,editor')) {
+        return false;
+    }
     // Check that gd library is available
     if (!ImageResize::gd_available()) {
         return false;
