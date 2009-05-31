@@ -147,14 +147,10 @@ class ImageResize {
         if (!file_exists($source)) {
             return false;
         }
-
-        $info = self::image_get_info($source);
-        if (!$info) {
+        if (!$info = self::image_get_info($source)) {
             return false;
         }
-
-        $im = self::image_gd_open($source, $info['extension']);
-        if (!$im) {
+        if (!$im = self::image_gd_open($source, $info['format'])) {
             return false;
         }
     
@@ -164,7 +160,7 @@ class ImageResize {
     
         $res = imagecreatetruecolor($width, $height);
         imagecopyresampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
-        $result = self::image_gd_write($res, $destination, $info['extension']);
+        $result = self::image_gd_write($res, $destination, $info['format']);
 
         imagedestroy($res);
         imagedestroy($im);
@@ -176,11 +172,10 @@ class ImageResize {
     /**
      * GD helper function to create an image resource from a file.
      */
-    public static function image_gd_open($file, $extension) {
-        $extension = str_replace('jpg', 'jpeg', $extension);
-        $open_func = 'imagecreatefrom'. $extension;
+    public static function image_gd_open($file, $format) {
+        $open_func = 'imagecreatefrom'. $format;
         if (!function_exists($open_func)) {
-          return false;
+            return false;
         }
         return $open_func($file);
     }
@@ -189,9 +184,8 @@ class ImageResize {
     /**
      * GD helper to write an image resource to a destination file.
      */
-    public static function image_gd_write($res, $destination, $extension) {
-        $extension = str_replace('jpg', 'jpeg', $extension);
-        $write_func = 'image'. $extension;
+    public static function image_gd_write($res, $destination, $format) {
+        $write_func = 'image'. $format;
         if (!function_exists($write_func)) {
             return false;
         }
@@ -199,7 +193,7 @@ class ImageResize {
             // If Frog is in debug mode, don't output to a file
             $destination = NULL;
             $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
-            header('Content-Type: image/'.$types[$extension]);
+            header('Content-Type: image/'.$types[$format]);
         }
         return $write_func($res, $destination);
     }
