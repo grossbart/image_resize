@@ -153,13 +153,15 @@ class ImageResize {
         if (!$im = self::image_gd_open($source, $info['format'])) {
             return false;
         }
-    
         /* Get source dimensions from GD info is not passed as parameters. */
         $source_width  = is_null($source_width)  ? $info['width']  : $source_width;
         $source_height = is_null($source_height) ? $info['height'] : $source_height;
     
         $res = imagecreatetruecolor($width, $height);
         imagecopyresampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
+        if (!imageistruecolor($im)) {
+            imagetruecolortopalette($res, false, 256);
+        }
         $result = self::image_gd_write($res, $destination, $info['format']);
 
         imagedestroy($res);
@@ -195,6 +197,12 @@ class ImageResize {
             $types = array('jpeg'=>'jpeg','gif'=>'gif','png'=>'png','wbmp'=>'vnd.wap.wbmp');
             header('Content-Type: image/'.$types[$format]);
         }
-        return $write_func($res, $destination);
+        $args = array($res, $destination);
+        switch($format) {
+            // Set quality values for JPEG and PNG
+            case "jpeg": $args[] = 60; break;
+            case "png":  $args[] = 9;  break;
+        }
+        return call_user_func_array($write_func, $args);
     }
 }
