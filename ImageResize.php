@@ -143,7 +143,7 @@ class ImageResize {
     /**
      * Scale an image to the specified size using GD.
      */
-    public static function image_gd_resize($source, $destination, $width, $height, $source_x = 0, $source_y = 0, $source_width = null, $source_height = null) {
+    protected static function image_gd_resize($source, $destination, $width, $height, $source_x = 0, $source_y = 0, $source_width = null, $source_height = null) {
         if (!file_exists($source)) {
             return false;
         }
@@ -174,7 +174,7 @@ class ImageResize {
     /**
      * GD helper function to create an image resource from a file.
      */
-    public static function image_gd_open($file, $format) {
+    protected static function image_gd_open($file, $format) {
         $open_func = 'imagecreatefrom'. $format;
         if (!function_exists($open_func)) {
             return false;
@@ -186,7 +186,7 @@ class ImageResize {
     /**
      * GD helper to write an image resource to a destination file.
      */
-    public static function image_gd_write($res, $destination, $format) {
+    protected static function image_gd_write($res, $destination, $format) {
         $write_func = 'image'. $format;
         if (!function_exists($write_func)) {
             return false;
@@ -200,8 +200,8 @@ class ImageResize {
         $args = array($res, $destination);
         switch($format) {
             // Set quality values for JPEG and PNG
-            case "jpeg": $args[] = 60; break;
-            case "png":  $args[] = 9;  break;
+            case 'jpeg': $args[] = 60; break;
+            case 'png':  $args[] = 9;  break;
         }
         return call_user_func_array($write_func, $args);
     }
