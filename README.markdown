@@ -51,6 +51,10 @@ Of course the original file (flower.jpg) has to exist. The thumbnails will be cr
 Trouble shooting
 -----------------
 
+### Must be logged in
+
+Please note, that as of version 1.3 administrator, developer or editor rights are needed to scale an image for security reasons. So make sure you're logged in.
+
 ### How to use Image Resize together with the Page Not Found plugin
 
 If you want to use Image Resize with Frog's Page Not Found plugin, you will have to include the following code at the top of your customized Page Not Found page:
@@ -81,8 +85,8 @@ Contributors
 Changelog
 ---------
 
-* 1.3.0 (Speculative)
-	* Require editor, developer or administrator permissions before resizing.
+* 1.3.0 (June 12, 2009)
+	* Require editor, developer or administrator permissions before resizing for security reasons.
 	* 8-bit PNGs are no longer converted to 24-bit.
 	* Now outputs directly to the browser instead of file when Frog is in debug mode.
 	* Improved sanity checks.

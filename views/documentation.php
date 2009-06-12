@@ -68,6 +68,10 @@
 
 <h3>Trouble shooting</h3>
 
+<h4>Must be logged in</h4>
+
+<p>Please note, that as of version 1.3 administrator, developer or editor rights are needed to scale an image for security reasons. So make sure you're logged in.</p>
+
 <h4>How to use Image Resize together with the Page Not Found plugin</h4>
 
 <p>If you want to use Image Resize with Frog&#8217;s Page Not Found plugin, you will have to include the following code at the top of your customized Page Not Found page:</p>
