@@ -130,6 +130,7 @@ class ImageResize {
             $format = ($extension=="jpg") ? "jpeg" : $extension;
             $details = array('width'     => $data[0],
                              'height'    => $data[1],
+                             'image_type' => $data[2],
                              'extension' => $extension,
                              'format'    => $format,
                              'mime_type' => $data['mime'],
@@ -138,8 +139,54 @@ class ImageResize {
             return self::$infoCache[$file];
         }
     }
-  
-  
+
+    /*
+     *  Transparency Fix for gif and png by Maxim Chernyak
+     *  http://mediumexposure.com/smart-image-resizing-while-preserving-transparency-php-and-gd-library/
+     */
+    public static function add_transparency($image_resized, $image, $info)
+    {
+        if ( ($info['image_type'] == IMAGETYPE_GIF) || ($info['image_type']  == IMAGETYPE_PNG) ) {
+          $trnprt_indx = imagecolortransparent($image);
+
+          // If we have a specific transparent color
+          if ($trnprt_indx >= 0) {
+
+            // Get the original image's transparent color's RGB values
+            $trnprt_color    = imagecolorsforindex($image, $trnprt_indx);
+
+            // Allocate the same color in the new image resource
+            $trnprt_indx    = imagecolorallocate($image_resized, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
+
+            // Completely fill the background of the new image with allocated color.
+            imagefill($image_resized, 0, 0, $trnprt_indx);
+
+            // Set the background color for new image to transparent
+            imagecolortransparent($image_resized, $trnprt_indx);
+
+
+          }
+          // Always make a transparent background color for PNGs that don't have one allocated already
+          elseif ($info['image_type'] == IMAGETYPE_PNG) {
+
+            // Turn off transparency blending (temporarily)
+            imagealphablending($image_resized, false);
+
+            // Create a new transparent color for image
+            $color = imagecolorallocatealpha($image_resized, 0, 0, 0, 127);
+
+            // Completely fill the background of the new image with allocated color.
+            imagefill($image_resized, 0, 0, $color);
+
+            // Restore transparency blending
+            imagesavealpha($image_resized, true);
+          }
+        }
+
+        return array($image_resized, $image);
+    }
+
+
     /**
      * Scale an image to the specified size using GD.
      */
@@ -158,6 +205,12 @@ class ImageResize {
         $source_height = is_null($source_height) ? $info['height'] : $source_height;
     
         $res = imagecreatetruecolor($width, $height);
+
+        /*
+         *  GIF, PNG transparency fix
+         */
+        list($res, $im) = self::add_transparency($res, $im, $info);
+
         imagecopyresampled($res, $im, 0, 0, $source_x, $source_y, $width, $height,  $source_width, $source_height);
         if (!imageistruecolor($im)) {
             imagetruecolortopalette($res, false, 256);
