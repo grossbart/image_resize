@@ -6,7 +6,7 @@ Plugin::setInfos(array(
     'id'          => 'image_resize',
     'title'       => 'Image Resize',
     'description' => 'Allows for dynamic resizing of images.',
-    'version'     => '1.3.0',
+    'version'     => '1.3.1',
     'license'     => 'GPL 3.0',
     'author'      => 'Peter Gassner',
     'website'     => 'http://www.naehrstoff.ch/code/image-resize-for-frog',

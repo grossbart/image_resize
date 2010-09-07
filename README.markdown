@@ -80,11 +80,13 @@ Contributors
 * Peter Gassner <peter@naehrstoff.ch>
 * Mika Tuupola <tuupola@appelsiini.net>
 * J. King <jking@jkingweb.ca>
-
+* René Kersten <info@pixel-webarts.de>
 
 Changelog
 ---------
 
+* 1.3.1 (July 15, 2010)
+  * Fixed transparency for Gif and PNG images
 * 1.3.0 (June 12, 2009)
 	* Require editor, developer or administrator permissions before resizing for security reasons.
 	* 8-bit PNGs are no longer converted to 24-bit.
